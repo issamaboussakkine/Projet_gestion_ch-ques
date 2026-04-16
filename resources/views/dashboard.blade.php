@@ -9,7 +9,19 @@
                     <h3>Tableau de bord</h3>
                 </div>
                 <div class="card-body">
-                    <h4>Bonjour {{ Auth::user()->name }} ! 👋</h4>
+                    
+                    <!-- Photo de profil au centre -->
+                    <div class="text-center mb-4">
+                        @if(Auth::user()->photo)
+                            <img src="{{ Storage::url(Auth::user()->photo) }}" alt="Photo" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover; border: 3px solid #007bff;">
+                        @else
+                            <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                                <span class="text-white" style="font-size: 40px;">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                            </div>
+                        @endif
+                    </div>
+                    
+                    <h4 class="text-center">Bonjour {{ Auth::user()->name }} ! 👋</h4>
                     
                     <div class="row mt-4">
                         <div class="col-md-3">
