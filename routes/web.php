@@ -8,7 +8,25 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $totalCheques = \App\Models\Cheque::count();
+    $enAttente = \App\Models\Cheque::where('status', 'en_attente')->count();
+    $valides = \App\Models\Cheque::where('status', 'valide')->count();
+    $refuses = \App\Models\Cheque::where('status', 'refuse')->count();
+    $montantTotal = \App\Models\Cheque::sum('amount');
+    $derniersCheques = \App\Models\Cheque::with('user')->latest()->take(5)->get();
+    $banques = \App\Models\Cheque::select('bank', \DB::raw('count(*) as total'))
+                                 ->groupBy('bank')
+                                 ->get();
+    
+    return view('dashboard', compact(
+        'totalCheques', 
+        'enAttente', 
+        'valides', 
+        'refuses', 
+        'montantTotal', 
+        'derniersCheques',
+        'banques'
+    ));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
