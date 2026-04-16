@@ -18,16 +18,15 @@ Route::get('/dashboard', function () {
                                  ->groupBy('bank')
                                  ->get();
     
-    
     return view('dashboard', compact(
-    'totalCheques', 
-    'enAttente', 
-    'valides', 
-    'refuses', 
-    'montantTotal', 
-    'derniersCheques',
-    'banques'
-));
+        'totalCheques', 
+        'enAttente', 
+        'valides', 
+        'refuses', 
+        'montantTotal', 
+        'derniersCheques',
+        'banques'
+    ));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

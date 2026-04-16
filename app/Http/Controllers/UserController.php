@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware()
     {
-        $this->middleware('admin');
+        return [
+            new Middleware('admin', only: ['index', 'create', 'store', 'edit', 'update', 'destroy']),
+        ];
     }
 
     public function index()
@@ -40,7 +44,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('users.index')->with('success', 'Utilisateur créé');
+        return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès');
     }
 
     public function edit(User $user)
@@ -58,13 +62,13 @@ class UserController extends Controller
 
         $user->update($request->only('name', 'email', 'role'));
 
-        return redirect()->route('users.index')->with('success', 'Utilisateur modifié');
+        return redirect()->route('users.index')->with('success', 'Utilisateur modifié avec succès');
     }
 
     public function destroy(User $user)
     {
         if ($user->id === auth()->id()) {
-            return back()->with('error', 'Vous ne pouvez pas vous supprimer');
+            return back()->with('error', 'Vous ne pouvez pas vous supprimer vous-même');
         }
         
         $user->delete();
