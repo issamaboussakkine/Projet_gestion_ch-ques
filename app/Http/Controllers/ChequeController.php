@@ -9,11 +9,38 @@ use Illuminate\Support\Facades\Auth;
 class ChequeController extends Controller
 {
     // Afficher la liste des chèques
-    public function index()
-    {
-        $cheques = Cheque::with('user')->latest()->paginate(10);
-        return view('cheques.index', compact('cheques'));
+   public function index(Request $request)
+{
+    $query = Cheque::with('user');
+    
+    // Filtre par statut
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
     }
+    
+    // Filtre par banque
+    if ($request->filled('bank')) {
+        $query->where('bank', 'like', '%' . $request->bank . '%');
+    }
+    
+    // Recherche par client ou numéro de chèque
+    if ($request->filled('search')) {
+        $query->where(function($q) use ($request) {
+            $q->where('client_name', 'like', '%' . $request->search . '%')
+              ->orWhere('cheque_number', 'like', '%' . $request->search . '%');
+        });
+    }
+    
+    $cheques = $query->latest()->paginate(10);
+    
+    // Pour garder les filtres dans la pagination
+    $cheques->appends($request->all());
+    
+    // Liste des banques pour le filtre
+    $banques = Cheque::select('bank')->distinct()->pluck('bank');
+    
+    return view('cheques.index', compact('cheques', 'banques'));
+}
 
     // Afficher le formulaire d'ajout
     public function create()
