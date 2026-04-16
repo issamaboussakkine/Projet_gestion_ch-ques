@@ -1,17 +1,50 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Tableau de bord</h3>
+                </div>
+                <div class="card-body">
+                    <h4>Bonjour {{ Auth::user()->name }} ! 👋</h4>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-3">
+                            <div class="alert alert-info text-center">
+                                <h2>{{ $totalCheques }}</h2>
+                                <p>Total chèques</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="alert alert-success text-center">
+                                <h2>{{ number_format($montantTotal, 2) }} DH</h2>
+                                <p>Montant total</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="alert alert-warning text-center">
+                                <h2>{{ $enAttente }}</h2>
+                                <p>En attente</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="alert alert-success text-center">
+                                <h2>{{ $valides }}</h2>
+                                <p>Validés</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="{{ route('cheques.index') }}" class="btn btn-primary">Voir les chèques</a>
+                        <a href="{{ route('cheques.create') }}" class="btn btn-success">Ajouter un chèque</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

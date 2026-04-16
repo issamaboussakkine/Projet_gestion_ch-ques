@@ -18,15 +18,16 @@ Route::get('/dashboard', function () {
                                  ->groupBy('bank')
                                  ->get();
     
+    
     return view('dashboard', compact(
-        'totalCheques', 
-        'enAttente', 
-        'valides', 
-        'refuses', 
-        'montantTotal', 
-        'derniersCheques',
-        'banques'
-    ));
+    'totalCheques', 
+    'enAttente', 
+    'valides', 
+    'refuses', 
+    'montantTotal', 
+    'derniersCheques',
+    'banques'
+));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -35,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Routes séparées (chacun ajoutera ses routes dans SON fichier)
+// Routes séparées
 require __DIR__.'/cheques.php';
 require __DIR__.'/users.php';
 require __DIR__.'/statistiques.php';
