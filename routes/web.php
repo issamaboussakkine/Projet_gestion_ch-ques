@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 // Routes séparées (chacun ajoutera ses routes dans SON fichier)
 require __DIR__.'/cheques.php';
 require __DIR__.'/users.php';
