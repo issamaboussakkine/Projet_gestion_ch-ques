@@ -1,29 +1,75 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Mon Profil</h3>
                 </div>
-            </div>
+                <div class="card-body">
+                    
+                    <!-- Photo de profil -->
+                    <div class="text-center mb-4">
+                        @if(Auth::user()->photo)
+                            <img src="{{ Storage::url(Auth::user()->photo) }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #007bff;">
+                        @else
+                            <div style="width: 120px; height: 120px; border-radius: 50%; background: #6c757d; display: inline-flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 50px; color: white;">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                            </div>
+                        @endif
+                    </div>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+                    <!-- Informations (lecture seule) -->
+                    <table class="table table-bordered">
+                        <tr>
+                            <th width="30%">Nom complet</th>
+                            <td>{{ Auth::user()->name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ Auth::user()->email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Entreprise</th>
+                            <td>{{ Auth::user()->entreprise ?? 'Non renseigné' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Poste</th>
+                            <td>{{ Auth::user()->poste ?? 'Non renseigné' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Téléphone</th>
+                            <td>{{ Auth::user()->telephone ?? 'Non renseigné' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Adresse</th>
+                            <td>{{ Auth::user()->adresse ?? 'Non renseigné' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Site web</th>
+                            <td>{{ Auth::user()->site_web ?? 'Non renseigné' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Domaine d'activité</th>
+                            <td>{{ Auth::user()->domaine_activite ?? 'Non renseigné' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Bio</th>
+                            <td>{{ Auth::user()->bio ?? 'Non renseigné' }}</td>
+                        </tr>
+                    </table>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
+                    <div class="text-center mt-3">
+                        <a href="{{ route('parametres.profil') }}" class="btn btn-primary">
+                            Modifier mon profil
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection
